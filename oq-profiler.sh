@@ -31,7 +31,7 @@ check_pkg () {
 
 check_permissions () {
     echo "Checking permissions"
-    ls -la /usr/openquake /var/lib/openquake > $OQDIRPATH/permissions
+    ls -la /usr/openquake /var/lib/openquake /etc/openquake > $OQDIRPATH/permissions
 }
 
 check_env () {

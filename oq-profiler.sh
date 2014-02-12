@@ -65,12 +65,22 @@ zip_results () {
 }
 
 
-if [ ! -x /usr/bin/openquake ]; then
-    echo "OpenQuake is not installed. Exiting."
-    exit 1
-fi
+## Main ##
 
-mkdir $OQDIRPATH || exit 1
+command -v openquake &> /dev/null || {
+    echo "OpenQuake is not installed. Aborting." >&2
+    exit 1
+}
+
+command -v zip &> /dev/null || {
+    echo "I require zip but it's not installed. Aborting." >&2
+    exit 1
+}
+
+mkdir $OQDIRPATH || {
+    echo 'I cannot write to '$OQDIRPATH'. Aborting' >&2
+    exit 1
+}
 
 {
 system_profiler

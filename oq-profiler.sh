@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2014, Daniele Viganò, GEM Foundation.
+# Copyright (c) 2014, Daniele Viganò (daniele.vigano@globalquakemodel.org), GEM Foundation.
 #
 # OpenQuake is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Affero General Public License as published

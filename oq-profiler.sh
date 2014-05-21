@@ -21,7 +21,7 @@ OQDIRPATH='/tmp/'$OQDIR
 
 system_profiler () {
     local system=$OQDIRPATH/system_profile
-    local commands=('uname -a' 'id' 'lscpu' 'lsblk' 'mount' 'lsb_release -a' 'cat /proc/cpuinfo' 'ps aux' 'du -hs /var/lib/postgres')
+    local commands=('uname -a' 'id' 'lscpu' 'lsblk' 'mount' 'lsb_release -a' 'cat /proc/cpuinfo' 'ps aux')
 
     for i in "${commands[@]}"
     do
@@ -29,6 +29,16 @@ system_profiler () {
         $i >> $system
         echo -e "\n##### End $i #####\n" >> $system
     done
+}
+
+postgres_profiler () {
+    local postgres=$OQDIRPATH/postgres_profile
+
+    echo "Gathering information on PostgreSQL"
+    echo -e "### Size on disk ###\n"
+    sudo du -hs /var/lib/postgres >> $postgres
+    echo -e "\n### Databases size ###\n"
+    sudo -u postgres psql -c "SELECT pg_database.datname, pg_database_size(pg_database.datname), pg_size_pretty(pg_database_size(pg_database.datname)) FROM pg_database ORDER BY pg_database_size DESC;" >> $postgres
 }
 
 check_pkg () {
@@ -103,6 +113,7 @@ check_pkg
 check_permissions
 copy_settings
 check_python
+postgres_profiler
 } 2>> $OQDIRPATH/errors.log
 
 ## Zip file creation

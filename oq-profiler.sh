@@ -35,10 +35,10 @@ postgres_profiler () {
     local postgres=$OQDIRPATH/postgres_profile
 
     echo "Gathering information on PostgreSQL"
-    echo -e "### Size on disk ###\n"
-    sudo du -hs /var/lib/postgres >> $postgres
-    echo -e "\n### Databases size ###\n"
-    sudo -u postgres psql -c "SELECT pg_database.datname, pg_database_size(pg_database.datname), pg_size_pretty(pg_database_size(pg_database.datname)) FROM pg_database ORDER BY pg_database_size DESC;" >> $postgres
+    echo -e "### Size on disk ###\n" >> $postgres
+    du -hs /var/lib/postgresql >> $postgres
+    echo -e "\n### Databases size ###\n" >> $postgres
+    su - postgres -c 'psql -c "SELECT pg_database.datname, pg_database_size(pg_database.datname), pg_size_pretty(pg_database_size(pg_database.datname)) FROM pg_database ORDER BY pg_database_size DESC;"' >> $postgres
 }
 
 check_pkg () {
@@ -86,11 +86,17 @@ zip_results () {
     cd /tmp
     echo 'Creating report zip file in '$HOME
     zip -9qr $OQDIR $OQDIR
-    cp $OQDIR.zip $HOME
+    chown -R $SUDO_USER.$SUDO_GROUP $OQDIR*
+    cp -a $OQDIR.zip $HOME
 }
 
 
 ## Main ##
+
+if [ $(id -u) -gt 0 ]; then
+    echo "This script requires sudo. Aborting." >&2
+    exit 1
+fi
 
 command -v openquake &> /dev/null || {
     echo "OpenQuake is not installed. Aborting." >&2
@@ -110,10 +116,10 @@ mkdir $OQDIRPATH || {
 {
 system_profiler
 check_pkg
-check_permissions
 copy_settings
 check_python
 postgres_profiler
+check_permissions
 } 2>> $OQDIRPATH/errors.log
 
 ## Zip file creation

@@ -21,7 +21,7 @@ OQDIRPATH='/tmp/'$OQDIR
 
 system_profiler () {
     local system=$OQDIRPATH/system_profile
-    local commands=('uname -a' 'id' 'lscpu' 'lsblk' 'mount' 'lsb_release -a' 'cat /proc/cpuinfo' 'ps aux')
+    local commands=('uname -a' 'lsb_release -a' 'lscpu' 'cat /proc/cpuinfo' 'lsblk' 'mount' 'free -m' 'ps aux')
 
     for i in "${commands[@]}"
     do

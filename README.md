@@ -7,7 +7,7 @@ OpenQuake system profiler
 As normal user run:
 
 ```bash
-wget -O- https://raw.githubusercontent.com/gem/openquake-profiler/master/oq-profiler.sh | sudo bash
+wget -qO- https://raw.githubusercontent.com/gem/openquake-profiler/master/oq-profiler.sh | sudo bash
 ```
 
 The script will generate a zip file in the user home folder with all the debug information related to the OpenQuake Engine setup.

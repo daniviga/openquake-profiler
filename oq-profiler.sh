@@ -98,10 +98,12 @@ if [ $(id -u) -gt 0 ]; then
     exit 1
 fi
 
-command -v openquake &> /dev/null || {
-    echo "OpenQuake is not installed. Aborting." >&2
-    exit 1
-}
+if ! command -v openquake &> /dev/null; then
+    if ! command -v oq-engine &> /dev/null; then
+        echo "OpenQuake is not installed. Aborting." >&2
+        exit 1
+    fi
+fi
 
 command -v zip &> /dev/null || {
     echo "I require zip but it's not installed. Aborting." >&2
